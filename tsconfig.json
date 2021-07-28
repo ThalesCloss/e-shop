@@ -1,12 +1,27 @@
 {
   "compilerOptions": {
     "incremental": true,
-    "target": "ES2021",
+    "target": "ES2019",
+    "lib": [
+      "ES2019"
+    ],
     "module": "CommonJS",
     "allowJs": true,
     "sourceMap": true,
     "outDir": "./dist",
     "rootDir": "./",
+    "rootDirs": [
+      "./shop",
+      "./shop_test"
+    ],
+    "paths": {
+      "@shop/*": [
+        "./shop/*"
+      ],
+      "@shop_tests/*": [
+        "./shop_tests/*"
+      ]
+    },
     "removeComments": true,
     "strict": true,
     "noImplicitAny": true,
@@ -15,7 +30,7 @@
     "noImplicitThis": true,
     "alwaysStrict": true,
     "moduleResolution": "node",
-    "baseUrl": "./",
+    "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -23,5 +38,9 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "include": [
+    "shop/**/*",
+    "shop_tests/**/*"
+  ]
 }
