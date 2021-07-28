@@ -1,4 +1,4 @@
-import { Customer, Gender } from '@shop/domain/entities/Customer';
+import { Customer } from '@shop/domain/entities/Customer';
 import { DomainError } from '@shop/domain/base/DomainError';
 
 describe('Unit test for Customer Entity', () => {
@@ -7,7 +7,7 @@ describe('Unit test for Customer Entity', () => {
       name: 'joao da silva',
       cpf: '99365027012',
       email: 'validemail@mail.com',
-      gender: Gender.M,
+      gender: Customer.Gender.M,
     });
     expect(customer).toBeInstanceOf(Customer);
     expect((customer as Customer).id.value).not.toHaveLength(0);
@@ -18,7 +18,7 @@ describe('Unit test for Customer Entity', () => {
       name: 'invalidname',
       cpf: '99365027342',
       email: 'validemail@mail',
-      gender: Gender.M,
+      gender: Customer.Gender.M,
     });
     expect(customer).toBeInstanceOf(DomainError);
     expect((customer as DomainError).errorsDetail).toHaveLength(3);
@@ -30,7 +30,7 @@ describe('Unit test for Customer Entity', () => {
         name: 'joao da silva',
         cpf: '99365027012',
         email: 'validemail@mail.com',
-        gender: Gender.M,
+        gender: Customer.Gender.M,
       },
       'invalidEntityId',
     );
@@ -43,14 +43,14 @@ describe('Unit test for Customer Entity', () => {
       name: 'joao da silva',
       cpf: '99365027012',
       email: 'validemail@mail.com',
-      gender: Gender.M,
+      gender: Customer.Gender.M,
     });
     const customer2 = Customer.create(
       {
         name: 'joao da silva',
         cpf: '99365027012',
         email: 'validemail@mail.com',
-        gender: Gender.M,
+        gender: Customer.Gender.M,
       },
       (customer1 as Customer).id.value,
     );
@@ -62,13 +62,13 @@ describe('Unit test for Customer Entity', () => {
       name: 'joao da silva',
       cpf: '99365027012',
       email: 'validemail@mail.com',
-      gender: Gender.M,
+      gender: Customer.Gender.M,
     });
     const customer2 = Customer.create({
       name: 'joao da silva',
       cpf: '99365027012',
       email: 'validemail@mail.com',
-      gender: Gender.M,
+      gender: Customer.Gender.M,
     });
     expect((customer1 as Customer).equals(customer2 as Customer)).toBeFalsy();
   });

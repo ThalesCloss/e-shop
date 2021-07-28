@@ -8,12 +8,12 @@ import { Email } from '../base/valueObjects/Email';
 
 export class Customer extends Entity<EntityId> {
   public static create(
-    customer: createCustomer,
+    customer: Customer.CustomerData,
     id?: string,
   ): DomainReturn<Customer> {
     const name = CompleteName.create(customer.name);
     const email = Email.create(customer.email);
-    const gender = customer.gender as Gender;
+    const gender = customer.gender as Customer.Gender;
     const cpf = CPF.create(customer.cpf);
     const entityId = EntityId.create(id);
     const errors: DomainError[] = [];
@@ -47,15 +47,17 @@ export class Customer extends Entity<EntityId> {
   }
 }
 
-type createCustomer = {
-  name: string;
-  email: string;
-  gender: Gender;
-  cpf: string;
-};
+export namespace Customer {
+  export interface CustomerData {
+    name: string;
+    email: string;
+    gender: Gender;
+    cpf: string;
+  }
 
-export enum Gender {
-  M = 'm',
-  F = 'f',
-  O = 'o',
+  export enum Gender {
+    M = 'm',
+    F = 'f',
+    O = 'o',
+  }
 }
