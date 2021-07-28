@@ -5,6 +5,18 @@
   "author": "thales <thales.a.closs@gmail.com>",
   "license": "MIT",
   "type": "module",
+  "scripts": {
+    "cm": "cz",
+    "test": "jest",
+    "lint": "eslint --ext .ts --fix",
+    "postinstall": "husky install",
+    "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules ./index.ts",
+    "prebuild": "rimraf ./dist",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "uuid": "^8.3.2"
+  },
   "devDependencies": {
     "@types/jest": "^26.0.24",
     "@types/uuid": "^8.3.1",
