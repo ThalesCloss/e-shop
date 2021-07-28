@@ -1,0 +1,21 @@
+FROM node:lts-alpine
+ARG API_PORT
+RUN apk update
+RUN apk add --no-cache \
+    bash \
+    git \
+    curl \
+    perl \
+    util-linux && \
+    cd /tmp && \
+    curl -OL https://raw.github.com/nvie/gitflow/develop/contrib/gitflow-installer.sh && \
+    sed -i '1s/#!\/bin\/bash/#!\/bin\/sh/' /tmp/gitflow-installer.sh && \
+    chmod +x /tmp/gitflow-installer.sh && \
+    sh /tmp/gitflow-installer.sh && \
+    rm -rf /var/tmp/* /tmp/* /var/cache/apk/*
+# RUN apk add bash
+# RUN apk add git
+# RUN apk add git-flow
+WORKDIR /app
+EXPOSE ${API_PORT}
+ENTRYPOINT [ "./docker/nodejs/start.dev.sh"]
