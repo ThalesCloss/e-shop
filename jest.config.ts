@@ -8,4 +8,8 @@ export default {
   coverageProvider: 'v8',
   preset: 'ts-jest',
   testEnvironment: 'node',
+  moduleNameMapper: {
+    '@shop/(.*)': ['<rootDir>/shop/$1'],
+    '@shop_tests/(.*)': ['<rootDir>/shop_tests/$1'],
+  },
 };
