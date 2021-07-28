@@ -22,4 +22,18 @@ describe('Unit tests for valueObject CPF', () => {
     const cpf = CPF.create('993.650.270-12');
     expect((cpf as CPF).value).toEqual('99365027012');
   });
+
+  it('should be true when comparing equal values', () => {
+    const cpf1 = CPF.create('993.650.270-12');
+    const cpf2 = CPF.create('99365027012');
+    expect((cpf1 as CPF).equals(cpf2 as CPF)).toBeTruthy();
+    const cpf3 = CPF.create('993.650.270-12');
+    expect((cpf1 as CPF).equals(cpf3 as CPF)).toBeTruthy();
+  });
+
+  it('should be true when comparing different values', () => {
+    const cpf1 = CPF.create('993.650.270-12');
+    const cpf2 = CPF.create('767.312.140-94');
+    expect((cpf1 as CPF).equals(cpf2 as CPF)).toBeFalsy();
+  });
 });
