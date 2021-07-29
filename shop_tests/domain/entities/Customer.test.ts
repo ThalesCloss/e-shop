@@ -76,4 +76,38 @@ describe('Unit test for Customer Entity', () => {
     expect(customer2).toBeInstanceOf(Customer);
     expect((customer1 as Customer).equals(customer2 as Customer)).toBeFalsy();
   });
+  it('should be update customer with valid data', () => {
+    const customer = Customer.create({
+      name: 'joao da silva',
+      cpf: '99365027012',
+      email: 'validemail@mail.com',
+      gender: 'M',
+    });
+    expect(customer).toBeInstanceOf(Customer);
+    expect((customer as Customer).id.value).not.toHaveLength(0);
+    const update = (customer as Customer).update({
+      email: 'mail.valid@mail.com',
+      gender: 'O',
+      name: 'joao da silva cunha',
+    });
+    expect(update).not.toBeInstanceOf(DomainError);
+  });
+
+  it('should be not update customer with invalid data', () => {
+    const customer = Customer.create({
+      name: 'joao da silva',
+      cpf: '99365027012',
+      email: 'validemail@mail.com',
+      gender: 'M',
+    });
+    expect(customer).toBeInstanceOf(Customer);
+    expect((customer as Customer).id.value).not.toHaveLength(0);
+    const update = (customer as Customer).update({
+      email: 'invalidemails',
+      gender: 'K' as Customer.Gender,
+      name: 'invalidName',
+    });
+    expect(update).toBeInstanceOf(DomainError);
+    expect((update as DomainError).errorsDetail).toHaveLength(3);
+  });
 });
