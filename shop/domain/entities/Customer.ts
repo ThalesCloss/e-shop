@@ -11,7 +11,7 @@ export class Customer extends Entity<EntityId> {
     entityId: EntityId,
     public name: CompleteName,
     public email: Email,
-    public gender: string,
+    public gender: Customer.Gender,
     public cpf: CPF,
   ) {
     super(entityId);
@@ -23,7 +23,7 @@ export class Customer extends Entity<EntityId> {
   ): DomainReturn<Customer> {
     const name = CompleteName.create(customer.name);
     const email = Email.create(customer.email);
-    const gender = customer.gender;
+    const gender = customer.gender as Customer.Gender;
     const cpf = CPF.create(customer.cpf);
     const entityId = EntityId.create(id);
     const errors: DomainError[] = [];
@@ -50,10 +50,11 @@ export class Customer extends Entity<EntityId> {
 }
 
 export namespace Customer {
+  export type GenderString = 'M' | 'F' | 'O';
   export interface CustomerData {
     name: string;
     email: string;
-    gender: 'M' | 'F' | 'O';
+    gender: GenderString;
     cpf: string;
   }
 
