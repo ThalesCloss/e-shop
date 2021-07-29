@@ -9,10 +9,10 @@ import { Email } from '../base/valueObjects/Email';
 export class Customer extends Entity<EntityId> {
   private constructor(
     entityId: EntityId,
-    public name: CompleteName,
-    public email: Email,
-    public gender: Customer.Gender,
-    public cpf: CPF,
+    private _name: CompleteName,
+    private _email: Email,
+    private _gender: Customer.Gender,
+    private _cpf: CPF,
   ) {
     super(entityId);
   }
@@ -46,6 +46,42 @@ export class Customer extends Entity<EntityId> {
 
   public equals(other: Customer): boolean {
     return this._id.equals(other.id) && this.cpf.equals(other.cpf);
+  }
+  get email() {
+    return this._email;
+  }
+  get name() {
+    return this._name;
+  }
+  get gender() {
+    return this._gender;
+  }
+  get cpf() {
+    return this._cpf;
+  }
+
+  public update(
+    update: Partial<Omit<Customer.CustomerData, 'cpf'>>,
+  ): DomainReturn<void> {
+    let email, name;
+    const errors: DomainError[] = [];
+
+    if (update.email) email = Email.create(update.email);
+    if (update.name) name = CompleteName.create(update.name);
+    if (update.gender && !(update.gender in Customer.Gender)) {
+      errors.push(new DomainError('Sexo inválido'));
+    }
+    if (email instanceof DomainError) errors.push(email);
+    if (name instanceof DomainError) errors.push(name);
+    if (errors.length)
+      return new DomainError('Erro ao atualizar o cliente', errors);
+
+    this._email = email as Email;
+    this._gender = update.gender
+      ? (update.gender as Customer.Gender)
+      : this.gender;
+    this._name = name as CompleteName;
+    return;
   }
 }
 
