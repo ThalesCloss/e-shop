@@ -22,9 +22,13 @@ export class UpdateCustomerInteractor
   ): Promise<DomainReturn<void, DomainError>> {
     const customer = await this.getCustomerUseCase.get(customerId);
     if (customer instanceof DomainError) return customer;
+
     const canUpdate = customer.update(updateCustomerData);
+
     if (canUpdate instanceof DomainError) return canUpdate;
-    await this.customerRepository.save(customer);
-    return;
+
+    const updated = await this.customerRepository.save(customer);
+
+    if (updated instanceof DomainError) return updated;
   }
 }
