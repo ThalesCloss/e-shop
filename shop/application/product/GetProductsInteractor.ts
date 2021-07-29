@@ -3,13 +3,13 @@ import { DomainReturn } from '@shop/domain/base/DomainReturn';
 import { EntityId } from '@shop/domain/base/valueObjects/EntityId';
 import { Product } from '@shop/domain/entities/Product';
 import { GetProductsUseCase } from '@shop/domain/useCases/product/GetProductsUseCase';
-import { ProductRepository } from './contracts/ProductRepository';
+import { GetProductsRepository } from './contracts/GetProductsRepository';
 
 export class GetProductsInteractor
   implements GetProductsUseCase<Promise<DomainReturn<Product[]>>>
 {
   constructor(
-    private readonly productRepository: ProductRepository<
+    private readonly productRepository: GetProductsRepository<
       Promise<DomainReturn<Product.CompleteProductData[]>>
     >,
   ) {}
@@ -20,7 +20,9 @@ export class GetProductsInteractor
       const entityIds = productIds.map((productId) =>
         EntityId.create(productId),
       );
-      const errors = entityIds.filter((entity) => !(entity instanceof Product));
+      const errors = entityIds.filter(
+        (entity) => !(entity instanceof EntityId),
+      );
       if (errors.length)
         return new DomainError(
           'Há produtos inválidos na solicitação',
@@ -28,9 +30,7 @@ export class GetProductsInteractor
         );
       productEntityIds.push(...(entityIds as EntityId[]));
     }
-    const products = await this.productRepository.getProducts<
-      Promise<Product.CompleteProductData[]>
-    >(productEntityIds);
+    const products = await this.productRepository.get(productEntityIds);
     if (products instanceof DomainError) return products;
 
     const productEntities = products.map((product) =>

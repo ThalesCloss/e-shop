@@ -21,7 +21,7 @@ export class GetProductInteractor
     const product = await this.productRepository.get(productEntityId);
     if (product instanceof DomainError) return product;
 
-    const costumerEntity = await Product.create(product, product.id);
-    return costumerEntity;
+    const productEntity = Product.create(product, product.id);
+    return productEntity;
   }
 }

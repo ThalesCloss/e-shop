@@ -5,5 +5,4 @@ export interface ProductRepository<R> {
   save(product: Product): R;
   delete(productEntityId: EntityId): R;
   get(productEntityId: EntityId): R;
-  getProducts<T>(productEntityIds?: EntityId[]): T;
 }
