@@ -7,16 +7,28 @@ import { CPF } from '../base/valueObjects/CPF';
 import { Email } from '../base/valueObjects/Email';
 
 export class Customer extends Entity<EntityId> {
+  private constructor(
+    entityId: EntityId,
+    public name: CompleteName,
+    public email: Email,
+    public gender: string,
+    public cpf: CPF,
+  ) {
+    super(entityId);
+  }
+
   public static create(
     customer: Customer.CustomerData,
     id?: string,
   ): DomainReturn<Customer> {
     const name = CompleteName.create(customer.name);
     const email = Email.create(customer.email);
-    const gender = customer.gender as Customer.Gender;
+    const gender = customer.gender;
     const cpf = CPF.create(customer.cpf);
     const entityId = EntityId.create(id);
     const errors: DomainError[] = [];
+    if (!(customer.gender in Customer.Gender))
+      errors.push(new DomainError('Sexo inválido'));
     if (name instanceof DomainError) errors.push(name);
     if (email instanceof DomainError) errors.push(email);
     if (cpf instanceof DomainError) errors.push(cpf);
@@ -32,16 +44,6 @@ export class Customer extends Entity<EntityId> {
     );
   }
 
-  private constructor(
-    entityId: EntityId,
-    public name: CompleteName,
-    public email: Email,
-    public gender: string,
-    public cpf: CPF,
-  ) {
-    super(entityId);
-  }
-
   public equals(other: Customer): boolean {
     return this._id.equals(other.id) && this.cpf.equals(other.cpf);
   }
@@ -51,13 +53,17 @@ export namespace Customer {
   export interface CustomerData {
     name: string;
     email: string;
-    gender: Gender;
+    gender: 'M' | 'F' | 'O';
     cpf: string;
   }
 
+  export interface CompleteCustomerData extends CustomerData {
+    id: string;
+  }
+
   export enum Gender {
-    M = 'm',
-    F = 'f',
-    O = 'o',
+    M = 'M',
+    F = 'F',
+    O = 'O',
   }
 }

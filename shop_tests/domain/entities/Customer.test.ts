@@ -7,7 +7,7 @@ describe('Unit test for Customer Entity', () => {
       name: 'joao da silva',
       cpf: '99365027012',
       email: 'validemail@mail.com',
-      gender: Customer.Gender.M,
+      gender: 'M',
     });
     expect(customer).toBeInstanceOf(Customer);
     expect((customer as Customer).id.value).not.toHaveLength(0);
@@ -18,10 +18,10 @@ describe('Unit test for Customer Entity', () => {
       name: 'invalidname',
       cpf: '99365027342',
       email: 'validemail@mail',
-      gender: Customer.Gender.M,
+      gender: 'K' as 'M',
     });
     expect(customer).toBeInstanceOf(DomainError);
-    expect((customer as DomainError).errorsDetail).toHaveLength(3);
+    expect((customer as DomainError).errorsDetail).toHaveLength(4);
   });
 
   it('should be return a DomainError when input a invalid entityId', () => {
@@ -30,7 +30,7 @@ describe('Unit test for Customer Entity', () => {
         name: 'joao da silva',
         cpf: '99365027012',
         email: 'validemail@mail.com',
-        gender: Customer.Gender.M,
+        gender: 'M',
       },
       'invalidEntityId',
     );
@@ -43,17 +43,19 @@ describe('Unit test for Customer Entity', () => {
       name: 'joao da silva',
       cpf: '99365027012',
       email: 'validemail@mail.com',
-      gender: Customer.Gender.M,
+      gender: 'M',
     });
     const customer2 = Customer.create(
       {
         name: 'joao da silva',
         cpf: '99365027012',
         email: 'validemail@mail.com',
-        gender: Customer.Gender.M,
+        gender: 'M',
       },
       (customer1 as Customer).id.value,
     );
+    expect(customer1).toBeInstanceOf(Customer);
+    expect(customer2).toBeInstanceOf(Customer);
     expect((customer1 as Customer).equals(customer2 as Customer));
   });
 
@@ -62,14 +64,16 @@ describe('Unit test for Customer Entity', () => {
       name: 'joao da silva',
       cpf: '99365027012',
       email: 'validemail@mail.com',
-      gender: Customer.Gender.M,
+      gender: 'M',
     });
     const customer2 = Customer.create({
       name: 'joao da silva',
       cpf: '99365027012',
       email: 'validemail@mail.com',
-      gender: Customer.Gender.M,
+      gender: 'M',
     });
+    expect(customer1).toBeInstanceOf(Customer);
+    expect(customer2).toBeInstanceOf(Customer);
     expect((customer1 as Customer).equals(customer2 as Customer)).toBeFalsy();
   });
 });
