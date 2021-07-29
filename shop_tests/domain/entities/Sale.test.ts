@@ -1,10 +1,35 @@
 import { ProductSale, Sale } from '@shop/domain/entities/Sale';
 import { Product } from '@shop/domain/entities/Product';
 import { DomainError } from '@shop/domain/base/DomainError';
+import { v4 } from 'uuid';
 
 describe('Unit test for Sale', () => {
+  const validInputSale: Omit<Sale.SaleData, 'products'> = {
+    createdAt: new Date(),
+    customerId: v4(),
+    observations: 'obs sale',
+    payment: 'CARD',
+  };
+  it('should be create a sale when valid input', () => {
+    const sale = Sale.create(validInputSale);
+    expect(sale).toBeInstanceOf(Sale);
+  });
+
+  it('should be return a domainError when invalid input', () => {
+    const sale = Sale.create(
+      {
+        ...validInputSale,
+        payment: 'OTHER' as Sale.SalePayment,
+        customerId: 'invalid',
+      },
+      'invalid',
+    );
+    expect(sale).toBeInstanceOf(DomainError);
+    expect((sale as DomainError).errorsDetail).toHaveLength(3);
+  });
+
   it('should be insert a ProductSale on Sale', () => {
-    const sale = Sale.create() as Sale;
+    const sale = Sale.create(validInputSale) as Sale;
     const product = Product.create({
       name: 'teste',
       color: 'teste',
@@ -20,7 +45,7 @@ describe('Unit test for Sale', () => {
   });
 
   it('should be update quantity of ProductSale on Sale', () => {
-    const sale = Sale.create() as Sale;
+    const sale = Sale.create(validInputSale) as Sale;
     const product = Product.create({
       name: 'teste',
       color: 'teste',
@@ -35,7 +60,7 @@ describe('Unit test for Sale', () => {
   });
 
   it('should be decrease quantity of ProductSale', () => {
-    const sale = Sale.create() as Sale;
+    const sale = Sale.create(validInputSale) as Sale;
     const product = Product.create({
       name: 'teste',
       color: 'teste',
@@ -51,7 +76,7 @@ describe('Unit test for Sale', () => {
   });
 
   it('should update the quantity to zero when the removed quantity is greater than the product quantity', () => {
-    const sale = Sale.create() as Sale;
+    const sale = Sale.create(validInputSale) as Sale;
     const product = Product.create({
       name: 'teste',
       color: 'teste',
@@ -65,7 +90,7 @@ describe('Unit test for Sale', () => {
   });
 
   it('should be return DomainError when updated quantity for missing ProductSale', () => {
-    const sale = Sale.create() as Sale;
+    const sale = Sale.create(validInputSale) as Sale;
     const product = Product.create({
       name: 'teste',
       color: 'teste',
@@ -77,7 +102,7 @@ describe('Unit test for Sale', () => {
   });
 
   it('should be return DomainError when removes missing ProductSale', () => {
-    const sale = Sale.create() as Sale;
+    const sale = Sale.create(validInputSale) as Sale;
     const product = Product.create({
       name: 'teste',
       color: 'teste',
@@ -89,7 +114,7 @@ describe('Unit test for Sale', () => {
   });
 
   it('should be return DomainError when add ProductSale and there is a Product with a different unit price', () => {
-    const sale = Sale.create() as Sale;
+    const sale = Sale.create(validInputSale) as Sale;
     const product1 = Product.create({
       name: 'teste',
       color: 'teste',
