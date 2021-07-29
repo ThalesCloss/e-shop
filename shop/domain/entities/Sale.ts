@@ -7,12 +7,38 @@ import { Product } from './Product';
 
 export class Sale extends Entity<EntityId> {
   private products: Map<string, ProductSale>;
-  private constructor(id: EntityId) {
+  private constructor(
+    id: EntityId,
+    private _customerId: EntityId,
+    public createdAt: Date,
+    public observations: string,
+    public payment: Sale.SalePayment,
+  ) {
     super(id);
     this.products = new Map();
   }
-  public static create(id?: string) {
-    return new Sale(EntityId.create(id) as EntityId);
+  public static create(saleData: Omit<Sale.SaleData, 'products'>, id?: string) {
+    const entityId = EntityId.create(id);
+    const customerId = EntityId.create(saleData.customerId);
+    const errors: DomainError[] = [];
+
+    if (entityId instanceof DomainError) errors.push(entityId);
+    if (customerId instanceof DomainError) errors.push(customerId);
+    if (!(saleData.payment in Sale.SalePayment))
+      errors.push(new DomainError('Metodo de pagamento inválido'));
+    if (errors.length) return new DomainError('Erro ao criar a venda', errors);
+
+    return new Sale(
+      entityId as EntityId,
+      customerId as EntityId,
+      saleData.createdAt,
+      saleData.observations,
+      saleData.payment as Sale.SalePayment,
+    );
+  }
+
+  get customerId() {
+    return this._customerId;
   }
 
   public addProduct(product: Product, quantity = 1): DomainReturn<void> {
@@ -57,6 +83,10 @@ export class Sale extends Entity<EntityId> {
     );
   }
 
+  get totalSale() {
+    return 0;
+  }
+
   public equals(other: Entity<EntityId>): boolean {
     return this.id.equals(other.id);
   }
@@ -97,7 +127,7 @@ export class ProductSale {
 export namespace Sale {
   export interface SaleData {
     createdAt: Date;
-    payment: SalePayment;
+    payment: SalePaymentType;
     observations: string;
     customerId: string;
     products: SaleProductData[];
@@ -111,9 +141,10 @@ export namespace Sale {
   export interface CompleteSaleData extends SaleData {
     id: string;
   }
+  export type SalePaymentType = 'MONEY' | 'CARD' | 'CHECK';
   export enum SalePayment {
-    MONEY = 'money',
-    CARD = 'card',
-    CHECK = 'check',
+    MONEY = 'MONEY',
+    CARD = 'CARD',
+    CHECK = 'CHECK',
   }
 }
