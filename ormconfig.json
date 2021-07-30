@@ -1,0 +1,9 @@
+{
+    "type": "mysql",
+    "host": "mysql_e-shop",
+    "port": 3306,
+    "username": "eshop",
+    "password": "eshop",
+    "database": "mysql_e-shop",
+    "synchronize": true
+}

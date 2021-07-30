@@ -20,6 +20,9 @@
       ],
       "@shop_tests/*": [
         "./shop_tests/*"
+      ],
+      "@api/*": [
+        "./nest-api/*"
       ]
     },
     "removeComments": true,
@@ -41,6 +44,7 @@
   },
   "include": [
     "shop/**/*",
-    "shop_tests/**/*"
+    "shop_tests/**/*",
+    "nest-api/**/*"
   ]
 }

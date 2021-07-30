@@ -9,13 +9,25 @@
     "test": "jest",
     "lint": "eslint --ext .ts --fix",
     "postinstall": "husky install",
-    "dev": "ts-node-dev  -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules ./index.ts",
+    "dev": "ts-node-dev  -r tsconfig-paths/register --inspect  --respawn --transpile-only --ignore-watch node_modules ./nest-api/main.ts ",
     "prebuild": "rimraf ./dist",
-    "build": "tsc"
+    "build": "tsc --build tsconfig.build.json"
   },
   "dependencies": {
+    "@nestjs/common": "^8.0.5",
+    "@nestjs/core": "^8.0.5",
+    "@nestjs/platform-express": "^8.0.5",
+    "@nestjs/swagger": "^5.0.9",
+    "@nestjs/typeorm": "^8.0.1",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
     "js-brasil": "^2.4.8",
     "module-alias": "^2.2.2",
+    "mysql2": "^2.2.5",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.3.0",
+    "swagger-ui-express": "^4.1.6",
+    "typeorm": "^0.2.35",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -46,6 +58,16 @@
     }
   },
   "_moduleAliases": {
-    "@shop": "dist/shop"
+    "@shop": "dist/shop",
+    "@api": "dist/nest-api"
+  },
+  "ormconfig": {
+    "type": "mysql",
+    "host": "mysql_e-shop",
+    "port": 3306,
+    "username": "eshop",
+    "password": "eshop",
+    "database": "mysql_e-shop",
+    "synchronize": true
   }
 }

@@ -11,5 +11,6 @@ export default {
   moduleNameMapper: {
     '@shop/(.*)': ['<rootDir>/shop/$1'],
     '@shop_tests/(.*)': ['<rootDir>/shop_tests/$1'],
+    '@api/(.*)': ['<rootDir>/nest-api/$1'],
   },
 };
