@@ -76,11 +76,11 @@ export class Customer extends Entity<EntityId> {
     if (errors.length)
       return new DomainError('Erro ao atualizar o cliente', errors);
 
-    this._email = email as Email;
+    if (email) this._email = email as Email;
     this._gender = update.gender
       ? (update.gender as Customer.Gender)
       : this.gender;
-    this._name = name as CompleteName;
+    if (name) this._name = name as CompleteName;
     return;
   }
 }

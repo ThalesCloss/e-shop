@@ -19,7 +19,7 @@ export class GetCustomerInteractor
     if (customerEntityId instanceof DomainError) return customerEntityId;
     const customer = await this.customerRepository.get(customerEntityId);
     if (customer instanceof DomainError) return customer;
-    const costumerEntity = await Customer.create(customer, customer.id);
+    const costumerEntity = Customer.create(customer, customer.id);
     return costumerEntity;
   }
 }
