@@ -20,3 +20,4 @@ Na url http://localhost:3000/docs/ é possível acessar a especificação Open-A
 Para executar os testes de unidade execute:
 
 `docker exec -it api_e-shop yarn test`
+
